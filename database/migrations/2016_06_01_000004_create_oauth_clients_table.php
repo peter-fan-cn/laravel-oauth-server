@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('secret', 100)->nullable();
             $table->string('provider')->nullable();
+            $table->string('company', 100)->nullable();
+            $table->string('site', 100)->nullable();
+            $table->text('description')->nullable();
             $table->text('redirect');
             $table->boolean('personal_access_client');
             $table->boolean('password_client');

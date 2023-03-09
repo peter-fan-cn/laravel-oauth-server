@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\OAuth\Scope;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,15 +32,13 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::hashClientSecrets();
 
-        // change to from the database.
-        Passport::tokensCan([
-            'user-avatar' => 'Place orders',
-            'user-permission' => 'Check order status',
-        ]);
 
-        Passport::setDefaultScope([
-            'check-status',
-            'place-orders',
-        ]);
+        if(!App::runningInConsole()) {
+            $scopes = Scope::all()
+                ->pluck('description', 'name')
+                ->all();
+            Passport::tokensCan($scopes);
+        }
     }
+
 }
