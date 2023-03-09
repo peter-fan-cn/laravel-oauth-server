@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\{ClientController,
     UserController};
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,11 @@ Route::prefix('/admin')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [AdminHomeController::class, 'index']);
-        Route::resource('users', UserController::class)->only(['index', 'show', 'edit','create']);
-        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit','create']);
-        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
+//        Route::resource('users', UserController::class)->only(['index', 'show', 'edit','create']);
+//        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit','create']);
+//        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
+
+        Route::inertia('users', 'Admin/Users/List');
+        Route::inertia('clients', 'Admin/Clients/List');
+        Route::inertia('tokens', 'Admin/Tokens/List');
     });
