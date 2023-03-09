@@ -34,31 +34,32 @@ export default ({formData, id}) => {
                             <input className='form-control' value={data.user_id} onChange={handleChange('user_id')}/>
                         </div>
                         <div className='row'>
-                        <div className='col mb-3'>
-                            <input className="form-check-input" type="checkbox" value="1" id="personal"
-                            onChange={handleChecked('personal_access_client')} checked={data.personal_access_client}
-                            />
-                            <label className="form-check-label ms-1" htmlFor="personal">
-                                Personal Access Client
-                            </label>
-                        </div>
-                        <div className='col mb-3'>
-                            <input className="form-check-input" type="checkbox" value="1" id="password"
-                                   onChange={handleChecked('password_client')} checked={data.password_client}
-                            />
-                            <label className="form-check-label ms-1" htmlFor="password">
-                                Password Client
-                            </label>
-                        </div>
+                            <div className='col mb-3'>
+                                <input className="form-check-input" type="checkbox" value="1" id="personal"
+                                       onChange={handleChecked('personal_access_client')}
+                                       checked={data.personal_access_client}
+                                />
+                                <label className="form-check-label ms-1" htmlFor="personal">
+                                    Personal Access Client
+                                </label>
+                            </div>
+                            <div className='col mb-3'>
+                                <input className="form-check-input" type="checkbox" value="1" id="password"
+                                       onChange={handleChecked('password_client')} checked={data.password_client}
+                                />
+                                <label className="form-check-label ms-1" htmlFor="password">
+                                    Password Client
+                                </label>
+                            </div>
                         </div>
                         <div className='mb-3'>
                             <label>Client Redirects</label>
                             <textarea className='form-control' value={data.redirect}/>
                         </div>
 
-                        {data.secret?<div>
+                        {data.secret ? <div>
                             <p>{data.secret}</p>
-                        </div>:null}
+                        </div> : null}
                     </form>
                 </div>
                 <div className="modal-footer">

@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Admin\{ClientController,
     HomeController as AdminHomeController,
+    ScopeController,
     TokenController,
     UserController};
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
@@ -32,11 +32,8 @@ Route::prefix('/admin')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [AdminHomeController::class, 'index']);
-//        Route::resource('users', UserController::class)->only(['index', 'show', 'edit','create']);
-//        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit','create']);
-//        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
-
-        Route::inertia('users', 'Admin/Users/List');
-        Route::inertia('clients', 'Admin/Clients/List');
-        Route::inertia('tokens', 'Admin/Tokens/List');
+        Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'create']);
+        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit', 'create']);
+        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
+        Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
     });

@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Passport\Client;
 
 class ClientController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $content = Client::with('user')->orderBy('created_at','desc')
-            ->paginate();
+        $content = [];
         return Inertia::render('Admin/Clients/List', $content);
     }
 

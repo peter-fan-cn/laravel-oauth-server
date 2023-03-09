@@ -1,73 +1,41 @@
 import React from 'react';
 import {Head} from "@inertiajs/react";
 import {dateFormat} from "../../../libraries/string";
+import Table from "../../../components/Data/Table";
 
-const Link = ({url, label, active, loadPage}) => {
-    const html = {__html: label}
-    let classes = 'page-link'
-    if (!url) classes += ' disabled'
-    if (active) classes += ' active';
-    const handlePageClick = () => {
-        if (loadPage) loadPage(url)
-    }
-    return <li className="page-item">
-        <a className={classes} href="#" dangerouslySetInnerHTML={html} onClick={handlePageClick}></a>
-    </li>
-}
 
-const Table = ({data, meta, loadPage}) => {
-    const {links, total, path} = meta;
-    return <>
-        <table className="table table-striped">
-            <thead>
-            <tr>
-                <th>#ID</th>
-                <th>User</th>
-                <th>Name</th>
-                <th>Personal</th>
-                <th>Password</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-                data.map(client => <tr key={client.id}>
-                    <td>{client.id}</td>
-                    <td>{client.user ? client.user.name : 'System'}</td>
-                    <td>{client.name}</td>
-                    <td>{client.personal_access_client ?
-                        <i className={'text-success fa-solid fa-check-circle'}/> : null}
-                    </td>
-                    <td>{client.password_client ?
-                        <i className={'text-success fa-solid fa-check-circle'}/> : null}
-                    </td>
-                    <td>{dateFormat(client.created_at)}</td>
-                    <td>{dateFormat(client.updated_at)}</td>
-                    <td>
-                        <a href={`${path}/${client.id}/edit`}>
-                            <i className={'fa-solid fa-pencil-alt'}></i>
-                        </a>
-                        <a className={'ms-2 link-danger'} href='#'>
-                            <i className={'fa-solid fa-trash'}></i>
-                        </a>
-                    </td>
-                </tr>)
+const DataTable = ({data, meta, loadPage}) => {
+    const columns = [
+        {title: '#ID', field: 'id'},
+        {title: 'Name', field: 'name'},
+        {
+            title: 'Personal',
+            field: 'personal_access_client',
+            render: (data) => data ? <i className={'text-success fa-solid fa-check-circle'}/> : null
+        },
+        {
+            title: 'Personal',
+            field: 'password_client',
+            render: (data) => data ? <i className={'text-success fa-solid fa-check-circle'}/> : null
+        },
+        {title: 'Created At', field: 'created_at', render: (data) => dateFormat(data)},
+        {title: 'Updated At', field: 'updated_at', render: (data) => dateFormat(data)},
+        {
+            title: 'Actions', render(_d, row) {
+                return <>
+                    <a href={`${meta.path}/${row.id}/edit`}>
+                        <i className={'fa-solid fa-pencil-alt'}></i>
+                    </a>
+                    <a className={'ms-2 link-danger'} href='#'>
+                        <i className={'fa-solid fa-trash'}></i>
+                    </a>
+                </>
             }
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation" className={'px-3'}>
-            <ul className="pagination">
-                {links.map(link => <Link {...link} loadPage={loadPage} key={link.label}/>)}
-                <li className={'page-item d-flex align-items-center px-3'}>
-                    <span>Total: {total} records</span>
-                </li>
-            </ul>
-        </nav>
-    </>
-}
+        },
+    ]
 
+    return <Table data={data} meta={meta} loadPage={loadPage} columns={columns}/>
+}
 
 export default class List extends React.PureComponent {
     constructor(props) {
@@ -99,13 +67,13 @@ export default class List extends React.PureComponent {
             </nav>
             <div className={'mb-3 mt-3 row'}>
                 <div className={'col'}>
-                    <a type={'button'} className={'btn btn-sm btn-primary'} href='#'>
-                        Add User
+                    <a type='button' className={'btn btn-sm btn-primary'} href='#'>
+                        Add Client
                     </a>
                 </div>
             </div>
             <div className='card'>
-                <Table data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage}/>
+                <DataTable data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage}/>
             </div>
         </>
     }

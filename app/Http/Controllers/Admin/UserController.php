@@ -12,11 +12,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query()->orderBy('created_at','desc');
-        $fields = ['id', 'name', 'email', 'created_at', 'updated_at'];
-        $perPage = $request->get('per_page', 10);
-        $content = $query->paginate($perPage, $fields);
-
+        $content = [];
         return Inertia::render('Admin/Users/List', $content);
     }
 
