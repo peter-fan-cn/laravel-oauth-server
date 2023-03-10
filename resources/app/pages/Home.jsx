@@ -7,12 +7,8 @@ export default ({auth}) => {
             <div className={'col-3'}>
                 <div className="list-group list-group-flush">
                     <a href={'/admin'} className="list-group-item list-group-item-action">
-                        Admin
+                        Admin Dashboard
                     </a>
-                    <li className="list-group-item">A second item</li>
-                    <li className="list-group-item">A third item</li>
-                    <li className="list-group-item">A fourth item</li>
-                    <li className="list-group-item">And a fifth one</li>
                 </div>
             </div>
             <div className={'col-9'}>
