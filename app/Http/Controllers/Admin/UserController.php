@@ -12,7 +12,9 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $content = [];
+        $content = [
+            'resource' => route('users.index')
+        ];
         return Inertia::render('Admin/Users/List', $content);
     }
 

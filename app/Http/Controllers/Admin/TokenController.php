@@ -12,15 +12,9 @@ class TokenController extends Controller
 {
     public function index(Request $request)
     {
-        $isPersonalAccessToken = $request->input('personal');
-
-        if ($isPersonalAccessToken) {
-            $query = PersonalAccessClient::with('user');
-        } else {
-            $query = Token::with('user');
-        }
-        $query->where('revoked', false);
-        $content = $query->paginate();
+        $content = [
+            'resource' => route('tokens.index')
+        ];
         return Inertia::render('Admin/Tokens/List', $content);
     }
 }

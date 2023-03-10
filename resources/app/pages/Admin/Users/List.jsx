@@ -7,7 +7,7 @@ import Loading from "../../../components/Loading";
 
 const DataTable = ({data, meta, loadPage}) => {
     const columns = [
-        {title: '#ID', field: 'id'},
+        //{title: '#ID', field: 'id'},
         {title: 'Name', field: 'name', render: (data, row) => <a href={'/admin/users/' + row.id}>{data}</a>},
         {title: 'Email', field: 'email'},
         {title: 'Created At', field: 'created_at', render: (data) => dateFormat(data)},
@@ -65,7 +65,7 @@ export default class List extends React.PureComponent {
             </nav>
             <div className={'mb-3 mt-3 row'}>
                 <div className={'col'}>
-                    <a type={'button'} className={'btn btn-sm btn-primary'} href='#'>
+                    <a type={'button'} className={'btn btn-sm btn-primary'} href='/admin/users/create'>
                         Add User
                     </a>
                 </div>

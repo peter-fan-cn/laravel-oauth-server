@@ -11,12 +11,16 @@ const DataTable = ({data, meta, loadPage, path}) => {
         {
             title: 'Name',
             field: 'name',
-            render: (data, row) => <a href={'/admin/clients/' + row.id}>{data}</a>
         },
         {
             title: 'User',
             field: 'user',
-            render: data => data ? <a href={'/admin/users/' + data.id}>{data.name}</a> : 'System'
+            render: data => data ? <a href={'/admin/users/' + data.id}>{data.name}</a> : '<nil>'
+        },
+        {
+            title: 'Client',
+            field: 'client',
+            render: data => data ? <a href={'/admin/clients/' + data.id}>{data.name}</a> : '<nil>'
         },
         {
             title: 'Scope',
