@@ -3,6 +3,7 @@ import axios from "axios";
 import {Head, Link} from "@inertiajs/react";
 import Form from "./Form";
 import Swal from "sweetalert2";
+import Loading from "../../../components/Loading";
 
 
 export default class Edit extends React.PureComponent {
@@ -33,7 +34,10 @@ export default class Edit extends React.PureComponent {
                             Swal.fire({
                                 title: 'Create client successful',
                                 icon: 'success'
+                            }).then(()=>{
+                                window.location.href = '/admin/clients'
                             })
+
                         },
                         e => {
                             Swal.fire({
@@ -59,12 +63,19 @@ export default class Edit extends React.PureComponent {
         }
     }
     componentDidMount() {
-        this.loadPopupUsers();
-        this.loadClient()
+
+        this.setState({loading: true})
+        Promise.all([
+            this.loadPopupUsers(),
+            this.loadClient()
+        ])
+            .then(() => {
+                this.setState({loading: false})
+            })
     }
 
     render() {
-        const {users, client} = this.state;
+        const {users, client, loading} = this.state;
         const {auth, id} = this.props;
         return (
             <>
@@ -90,6 +101,7 @@ export default class Edit extends React.PureComponent {
                             </div>
                         </div>
                     </div>
+                    <Loading visible={loading}/>
                 </div>
             </>
         );

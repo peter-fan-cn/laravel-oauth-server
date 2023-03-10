@@ -2,6 +2,7 @@ import React from 'react';
 import {Head} from "@inertiajs/react";
 import {dateFormat} from "../../../libraries/string";
 import Table from "../../../components/Data/Table";
+import Loading from "../../../components/Loading";
 
 
 const DataTable = ({data, meta, loadPage, path}) => {
@@ -58,16 +59,20 @@ export default class List extends React.PureComponent {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
-        this.state = {data: [], meta: {links: [], total: 0, path: "", current_page: 1}};
+        this.state = {data: [], meta: {links: [], total: 0, path: "", current_page: 1}, loading: false};
     }
 
     handleLoadData(url) {
         const {meta: {current_page}} = this.state
+        this.setState({loading: true})
         axios.get(url || `/api/clients?page=${current_page}`)
             .then(
                 res => this.setState(res.data),
                 e => console.log(e)
             )
+            .then(()=>{
+                this.setState({loading: false})
+            })
     }
 
     componentDidMount() {
@@ -76,7 +81,7 @@ export default class List extends React.PureComponent {
 
     render() {
         const {resource} = this.props
-        const {meta, data} = this.state
+        const {meta, data,loading} = this.state
         return <>
             <Head title="User Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>
@@ -94,6 +99,7 @@ export default class List extends React.PureComponent {
             </div>
             <div className='card'>
                 <DataTable meta={meta} data={data} path={resource} loadPage={this.handleLoadData}/>
+                <Loading visible={loading}/>
             </div>
         </>
     }

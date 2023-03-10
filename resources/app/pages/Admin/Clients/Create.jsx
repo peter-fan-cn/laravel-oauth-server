@@ -3,19 +3,22 @@ import {Head, Link} from "@inertiajs/react";
 import axios from "axios";
 import Swal from 'sweetalert2'
 import Form from "./Form";
+import Loading from "../../../components/Loading";
 
 
 export default class Create extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {users: [], client: {}}
+        this.state = {users: [], client: null, loading: false}
     }
 
     loadPopupUsers() {
-        axios.get('/api/users?res_type=full')
-            .then(res => {
-                this.setState({users: res.data.data})
-            })
+        return axios.get('/api/users?res_type=full')
+            .then(
+                res => this.setState({users: res.data.data}),
+                e => console.log(e)
+            )
+
     }
 
     handleSaveClient(data) {
@@ -33,10 +36,12 @@ export default class Create extends React.PureComponent {
                             Swal.fire({
                                 title: 'Create client successful',
                                 icon: 'success'
+                            }).then(()=>{
+                                window.location.href = '/admin/clients'
                             })
                         },
                         e => {
-                            const message = e.response?e.response.data.message:e.message
+                            const message = e.response ? e.response.data.message : e.message
                             Swal.fire({
                                 title: 'Create client failed',
                                 text: message,
@@ -49,11 +54,15 @@ export default class Create extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.loadPopupUsers();
+        this.setState({loading: true})
+        this.loadPopupUsers()
+            .then(() => {
+                this.setState({loading: false})
+            })
     }
 
     render() {
-        const {users} = this.state;
+        const {users, loading} = this.state;
         const {auth} = this.props;
         return (
             <>
@@ -79,6 +88,7 @@ export default class Create extends React.PureComponent {
                             </div>
                         </div>
                     </div>
+                    <Loading visible={loading}/>
                 </div>
             </>
         );

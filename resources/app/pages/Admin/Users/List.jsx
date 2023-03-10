@@ -2,6 +2,7 @@ import React from 'react';
 import {Head} from "@inertiajs/react";
 import Table from "../../../components/Data/Table";
 import {dateFormat} from "../../../libraries/string";
+import Loading from "../../../components/Loading";
 
 
 const DataTable = ({data, meta, loadPage}) => {
@@ -34,22 +35,26 @@ export default class List extends React.PureComponent {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
-        this.state = {data: [], meta: {links: [], total: 0, path: "", current_page: 1}};
-        this.handleLoadPage = (url) => {
-            const {current_page} = this.state.meta
-            axios.get(url || `/api/users?page=${current_page}`)
-                .then(
-                    res => this.setState(res.data),
-                    e => console.log(e)
-                )
-        }
+        this.state = {data: [], meta: {links: [], total: 0, path: "", current_page: 1}, loading: false};
     }
-
+    handleLoadPage  (url) {
+        const {meta:{current_page}} = this.state
+        this.setState({loading: true})
+        axios.get(url || `/api/users?page=${current_page}`)
+            .then(
+                res => this.setState(res.data),
+                e => console.log(e)
+            )
+            .then(()=>{
+                this.setState({loading: false})
+            })
+    }
     componentDidMount() {
         this.handleLoadPage();
     }
 
     render() {
+        const {loading, meta, data} = this.state;
         return <>
             <Head title="User Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>
@@ -66,7 +71,9 @@ export default class List extends React.PureComponent {
                 </div>
             </div>
             <div className='card'>
-                <DataTable data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage}/>
+
+                <DataTable data={data} meta={meta} loadPage={this.handleLoadPage}/>
+                <Loading visible={loading}/>
             </div>
         </>
     }
