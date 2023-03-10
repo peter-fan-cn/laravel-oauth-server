@@ -2,33 +2,62 @@ import React from "react";
 import axios from "axios";
 import {Head, Link} from "@inertiajs/react";
 import Form from "./Form";
+import Swal from "sweetalert2";
 
 
 export default class Edit extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {users: [], client: {}}
+        this.state = {users: [], client: null}
     }
 
     loadPopupUsers() {
-        axios.get('/api/users?res_type=full')
+        return axios.get('/api/users?res_type=full')
             .then(res => {
                 this.setState({users: res.data.data})
             })
     }
 
-    handleSaveClient() {
+    handleSaveClient(data) {
+        const {id, user, ...client} = data;
 
+        Swal.fire({
+            title: 'Saving client data',
+            didOpen(popup) {
+                Swal.showLoading()
+                axios.put('/api/clients/' + id, {...client})
+                    .then(
+                        res => {
+                            // redirect to list.
+                            // show secret
+                            Swal.fire({
+                                title: 'Create client successful',
+                                icon: 'success'
+                            })
+                        },
+                        e => {
+                            Swal.fire({
+                                title: 'Create client failed',
+                                icon: 'error'
+                            })
+                        }
+                    )
+            }
+        })
     }
+
 
     loadClient() {
-        const {id} = this.props;
-        axios.get('/api/clients/' + id)
-            .then(res => {
-                this.setState({client: res.data.data})
-            })
+        const {id, client} = this.props;
+        if (!client && id)
+            return axios.get('/api/clients/' + id)
+                .then(res => {
+                    this.setState({client: res.data.data})
+                })
+        else {
+            this.setState({client})
+        }
     }
-
     componentDidMount() {
         this.loadPopupUsers();
         this.loadClient()
@@ -54,7 +83,10 @@ export default class Edit extends React.PureComponent {
                     <div className='card-body'>
                         <div className='row'>
                             <div className='offset-md-2 col-md-8'>
-                                <Form users={users} user={auth.user} client={client} onSave={this.handleSaveClient}/>
+                                <Form users={users}
+                                      user={auth.user}
+                                      client={client}
+                                      onSave={this.handleSaveClient}/>
                             </div>
                         </div>
                     </div>

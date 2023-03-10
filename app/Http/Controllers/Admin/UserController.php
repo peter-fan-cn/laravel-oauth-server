@@ -21,10 +21,10 @@ class UserController extends Controller
         return Inertia::render('Admin/Users/Create');
     }
 
-    public function edit(Client $client)
+    public function edit(User $user)
     {
         return Inertia::render('Admin/Users/Edit', [
-            'client' => $client
+            'user' => $user
         ]);
     }
 
@@ -32,7 +32,7 @@ class UserController extends Controller
     {
         if (!$user) $user = $request->user();
         return Inertia::render('Admin/Users/Show', [
-            'user' => $user->except(['password'])
+            'user' => $user
         ]);
     }
 

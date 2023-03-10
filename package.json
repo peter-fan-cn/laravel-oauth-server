@@ -17,6 +17,8 @@
         "react-dom": "^18.2.0",
         "react-select": "^5.7.0",
         "sass": "^1.56.1",
+        "sweetalert2": "^11.7.3",
+        "sweetalert2-react-content": "^5.0.7",
         "vite": "^3.0.0"
     }
 }

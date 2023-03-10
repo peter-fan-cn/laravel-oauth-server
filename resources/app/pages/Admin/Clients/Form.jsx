@@ -1,34 +1,39 @@
 import React, {useEffect, useState} from "react";
 import Select from "react-select";
 
-export default ({user, users, client, onSave}) => {
+export default ({user, users, client, onSave, loading}) => {
     const initialState = {
         id: null,
         name: '',
-        user: null,
-        user_id: null,
+        user_id: user.id,
         redirect: '',
+        company: '',
+        site: '',
+        description: '',
         personal_access_client: false,
         password_client: false,
         secret: null
     }
     const [data, setData] = useState(initialState)
+    const [options, setOptions] = useState([])
     useEffect(() => {
-        const clientUser = userOptions.filter(item => item.value === client.user_id)[0]
-
-        setData({...client, user: clientUser ? {label: user.name, value: user.id} : null})
-    }, [client])
+        const userOptions = users.map(item => ({
+            label: item.name,
+            value: item.id
+        }))
+        setOptions(userOptions)
+        if(client) {
+            const user = userOptions.filter(item => item.value === client.user_id)[0]
+            setData({...client, user: user})
+        }
+    }, [client, users])
     const handleChange = (key, value) => setData({...data, [key]: value})
-    const userOptions = users.map(item => ({
-        label: item.name,
-        value: item.id
-    }))
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(data)
+        onSave({...data})
     }
     return <>
-        <form method='post' onSubmit={handleSubmit}>
+        <form method='post' onSubmit={handleSubmit} aria-disabled={loading} >
             <div className='mb-3'>
                 <label>Client Name</label>
                 <input className='form-control' value={data.name}
@@ -37,7 +42,7 @@ export default ({user, users, client, onSave}) => {
             </div>
             <div className='mb-3'>
                 <label>Client User</label>
-                <Select options={userOptions} defaultValue={data.user}
+                <Select options={options} value={data.user}
                         placeholder='Select a user for current client'
                         onChange={event => handleChange('user_id', event.value)}/>
             </div>
@@ -72,6 +77,12 @@ export default ({user, users, client, onSave}) => {
                 <input className='form-control' value={data.company}
                        placeholder='Enter company name'
                        onChange={e => handleChange('company', e.target.value)}/>
+            </div>
+            <div className='mb-3'>
+                <label>Company Site</label>
+                <input className='form-control' value={data.site}
+                       placeholder='Enter domain site'
+                       onChange={e => handleChange('site', e.target.value)}/>
             </div>
             <div className='mb-3'>
                 <label>Company Description</label>

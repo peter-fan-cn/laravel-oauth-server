@@ -41,6 +41,14 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->validate([
+            'name' => 'required|max:100',
+            'redirect' => 'nullable|string',
+            'personal_access_client' => 'required|boolean',
+            'password_client' => 'required|boolean',
+            'company' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:255',
+        ]);
         $client = new Client();
         $client->fill($request->all());
         $client->revoked = false;
@@ -64,7 +72,9 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $client->fill($request->all());
+        $client->save();
+        return JsonResource::make($client);
     }
 
     /**

@@ -1,13 +1,14 @@
 import React from "react";
 import {Head, Link} from "@inertiajs/react";
 import axios from "axios";
+import Swal from 'sweetalert2'
 import Form from "./Form";
 
 
 export default class Create extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {users: [], user: null, client: {}}
+        this.state = {users: [], client: {}}
     }
 
     loadPopupUsers() {
@@ -18,17 +19,33 @@ export default class Create extends React.PureComponent {
     }
 
     handleSaveClient(data) {
-        const {name, user_id, redirect, personal_access_client = false, password_client = false} = data;
-        axios.post('/api/clients', {name, user_id, redirect, personal_access_client, password_client})
-            .then(
-                res => {
-                    // redirect to list.
-                    // show secret
-                },
-                e => {
+        const {id, user, ...client} = data;
 
-                }
-            )
+        Swal.fire({
+            title: 'Saving client data',
+            didOpen(popup) {
+                Swal.showLoading()
+                axios.post('/api/clients', {...client})
+                    .then(
+                        res => {
+                            // redirect to list.
+                            // show secret
+                            Swal.fire({
+                                title: 'Create client successful',
+                                icon: 'success'
+                            })
+                        },
+                        e => {
+                            const message = e.response?e.response.data.message:e.message
+                            Swal.fire({
+                                title: 'Create client failed',
+                                text: message,
+                                icon: 'error'
+                            })
+                        }
+                    )
+            }
+        })
     }
 
     componentDidMount() {
@@ -55,7 +72,10 @@ export default class Create extends React.PureComponent {
                     <div className='card-body'>
                         <div className='row'>
                             <div className='offset-md-2 col-md-8'>
-                                <Form users={users} user={auth.user} client={null} onSave={this.handleSaveClient}/>
+                                <Form users={users}
+                                      user={auth.user}
+                                      client={null}
+                                      onSave={this.handleSaveClient}/>
                             </div>
                         </div>
                     </div>
