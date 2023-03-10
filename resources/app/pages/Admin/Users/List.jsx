@@ -7,10 +7,10 @@ import {dateFormat} from "../../../libraries/string";
 const DataTable = ({data, meta, loadPage}) => {
     const columns = [
         {title: '#ID', field: 'id'},
-        {title: 'Name', field: 'name'},
+        {title: 'Name', field: 'name', render: (data, row) => <a href={'/admin/users/' + row.id}>{data}</a>},
         {title: 'Email', field: 'email'},
-        {title: 'Created At', field: 'created_at', render:(data)=>dateFormat(data)},
-        {title: 'Updated At', field: 'updated_at', render:(data)=>dateFormat(data)},
+        {title: 'Created At', field: 'created_at', render: (data) => dateFormat(data)},
+        {title: 'Updated At', field: 'updated_at', render: (data) => dateFormat(data)},
         {
             title: 'Actions', render(_d, row) {
                 return <>
@@ -66,7 +66,7 @@ export default class List extends React.PureComponent {
                 </div>
             </div>
             <div className='card'>
-                <DataTable data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage} />
+                <DataTable data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage}/>
             </div>
         </>
     }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 use Laravel\Passport\Client;
+
 
 class ClientController extends Controller
 {
@@ -16,7 +18,7 @@ class ClientController extends Controller
      */
     public function index(Request $request, $user_id = null): JsonResource
     {
-        $query  = Client::query()->orderBy('created_at', 'desc');
+        $query  = Client::with('user')->orderBy('created_at', 'desc');
         $fields = $request->get('fields', null);
         $fields = $fields ?: ['id', 'name', 'user_id', 'provider', 'redirect', 'personal_access_client', 'password_client', 'revoked', 'created_at', 'updated_at'];
         if (is_string($fields)) {
@@ -39,21 +41,28 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $client = new Client();
+        $client->fill($request->all());
+        $client->revoked = false;
+        $client->makeVisible('secret');
+        $secret = Str::random(32);
+        $client->secret = $secret;
+        $client->save();
+        return JsonResource::make($client);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Client $client)
     {
-        //
+        return JsonResource::make($client);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Client $client)
     {
         //
     }
@@ -61,7 +70,7 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Client $client)
     {
         //
     }

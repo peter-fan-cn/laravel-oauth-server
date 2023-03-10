@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Laravel\Passport\Client;
 
 class ClientController extends Controller
 {
 
     public function index(Request $request)
     {
-        $content = [];
+        $content = [
+            'resource' => route('clients.index')
+        ];
         return Inertia::render('Admin/Clients/List', $content);
     }
 
@@ -21,10 +22,15 @@ class ClientController extends Controller
         return Inertia::render('Admin/Clients/Create');
     }
 
-    public function edit(Client $client)
+    public function show($client_id)
+    {
+        return Inertia::render('Admin/Clients/Show', ['id' => $client_id]);
+    }
+
+    public function edit($client_id)
     {
         return Inertia::render('Admin/Clients/Edit', [
-            'client' => $client
+            'id' => $client_id
         ]);
     }
 

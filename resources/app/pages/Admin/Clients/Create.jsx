@@ -1,66 +1,67 @@
-import React, {useState} from "react";
+import React from "react";
 import {Head, Link} from "@inertiajs/react";
+import axios from "axios";
+import Form from "./Form";
 
 
-export default ({auth}) => {
-    const initialState = {
-        id: null,
-        name: '',
-        user_id: null,
-        redirect: '',
-        personal_access_client: false,
-        password_client: false,
-        secret: null
+export default class Create extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {users: [], user: null, client: {}}
     }
-    const [data, setData] = useState(initialState)
-    const handleChange = key => e => setData({...data, [key]: e.target.value})
-    const handleChecked = key => e => setData({...data, [key]: e.target.checked})
-    return <>
-        <Head title="Create Client"/>
-        <nav aria-label="breadcrumb" className={'mt-3'}>
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item"><Link href="/admin/">Home</Link></li>
-                <li className="breadcrumb-item"><Link href="/admin/clients">Clients</Link></li>
-                <li className="breadcrumb-item active" aria-current="page">Client Create</li>
-            </ol>
-        </nav>
 
-        <form method='post'>
-            <div className='mb-3'>
-                <label>Client Name</label>
-                <input className='form-control' value={data.name} onChange={handleChange('name')}/>
-            </div>
-            <div className='mb-3'>
-                <label>Client User</label>
-                <input className='form-control' value={data.user_id} onChange={handleChange('user_id')}/>
-            </div>
-            <div className='row'>
-                <div className='col mb-3'>
-                    <input className="form-check-input" type="checkbox" value="1" id="personal"
-                           onChange={handleChecked('personal_access_client')}
-                           checked={data.personal_access_client}
-                    />
-                    <label className="form-check-label ms-1" htmlFor="personal">
-                        Personal Access Client
-                    </label>
-                </div>
-                <div className='col mb-3'>
-                    <input className="form-check-input" type="checkbox" value="1" id="password"
-                           onChange={handleChecked('password_client')} checked={data.password_client}
-                    />
-                    <label className="form-check-label ms-1" htmlFor="password">
-                        Password Client
-                    </label>
-                </div>
-            </div>
-            <div className='mb-3'>
-                <label>Client Redirects</label>
-                <textarea className='form-control' value={data.redirect}/>
-            </div>
+    loadPopupUsers() {
+        axios.get('/api/users?res_type=full')
+            .then(res => {
+                this.setState({users: res.data.data})
+            })
+    }
 
-            {data.secret ? <div>
-                <p>{data.secret}</p>
-            </div> : null}
-        </form>
-    </>
+    handleSaveClient(data) {
+        const {name, user_id, redirect, personal_access_client = false, password_client = false} = data;
+        axios.post('/api/clients', {name, user_id, redirect, personal_access_client, password_client})
+            .then(
+                res => {
+                    // redirect to list.
+                    // show secret
+                },
+                e => {
+
+                }
+            )
+    }
+
+    componentDidMount() {
+        this.loadPopupUsers();
+    }
+
+    render() {
+        const {users} = this.state;
+        const {auth} = this.props;
+        return (
+            <>
+                <Head title="Create Client"/>
+                <nav aria-label="breadcrumb" className={'mt-3'}>
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link href="/admin/">Home</Link></li>
+                        <li className="breadcrumb-item"><Link href="/admin/clients">Clients</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Client Create</li>
+                    </ol>
+                </nav>
+                <div className='card'>
+                    <h5 className='card-header'>
+                        Create New Client
+                    </h5>
+                    <div className='card-body'>
+                        <div className='row'>
+                            <div className='offset-md-2 col-md-8'>
+                                <Form users={users} user={auth.user} client={null} onSave={this.handleSaveClient}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
 }

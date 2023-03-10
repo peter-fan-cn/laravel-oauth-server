@@ -4,10 +4,19 @@ import {dateFormat} from "../../../libraries/string";
 import Table from "../../../components/Data/Table";
 
 
-const DataTable = ({data, meta, loadPage}) => {
+const DataTable = ({data, meta, loadPage, path}) => {
     const columns = [
         {title: '#ID', field: 'id'},
-        {title: 'Name', field: 'name'},
+        {
+            title: 'Name',
+            field: 'name',
+            render: (data, row) => <a href={'/admin/clients/' + row.id}>{data}</a>
+        },
+        {
+            title: 'User',
+            field: 'user',
+            render: data => data ? <a href={'/admin/users/' + data.id}>{data.name}</a> : 'System'
+        },
         {
             title: 'Personal',
             field: 'personal_access_client',
@@ -18,17 +27,25 @@ const DataTable = ({data, meta, loadPage}) => {
             field: 'password_client',
             render: (data) => data ? <i className={'text-success fa-solid fa-check-circle'}/> : null
         },
-        {title: 'Created At', field: 'created_at', render: (data) => dateFormat(data)},
-        {title: 'Updated At', field: 'updated_at', render: (data) => dateFormat(data)},
+        {
+            title: 'Revoked',
+            field: 'revoked',
+            render: (data) => data ? <i className={'text-danger fa-solid fa-check-circle'}/> : null
+        },
+        {title: 'Created At', field: 'created_at', render: data => dateFormat(data)},
+        // {title: 'Updated At', field: 'updated_at', render: data => dateFormat(data)},
         {
             title: 'Actions', render(_d, row) {
                 return <>
-                    <a href={`${meta.path}/${row.id}/edit`}>
+                    <a href={`${path}/${row.id}/edit`}>
                         <i className={'fa-solid fa-pencil-alt'}></i>
                     </a>
+                    {row.revoked?<a className={'ms-2 link-warning'} href='#'>
+                        <i className={'fa-solid fa-arrow-rotate-back'}></i>
+                    </a>:
                     <a className={'ms-2 link-danger'} href='#'>
                         <i className={'fa-solid fa-trash'}></i>
-                    </a>
+                    </a>}
                 </>
             }
         },
@@ -42,21 +59,24 @@ export default class List extends React.PureComponent {
         super(props);
         // Don't call this.setState() here!
         this.state = {data: [], meta: {links: [], total: 0, path: "", current_page: 1}};
-        this.handleLoadPage = (url) => {
-            const {current_page} = this.state.meta
-            axios.get(url || `/api/clients?page=${current_page}`)
-                .then(
-                    res => this.setState(res.data),
-                    e => console.log(e)
-                )
-        }
+    }
+
+    handleLoadData(url) {
+        const {meta: {current_page}} = this.state
+        axios.get(url || `/api/clients?page=${current_page}`)
+            .then(
+                res => this.setState(res.data),
+                e => console.log(e)
+            )
     }
 
     componentDidMount() {
-        this.handleLoadPage();
+        this.handleLoadData();
     }
 
     render() {
+        const {resource} = this.props
+        const {meta, data} = this.state
         return <>
             <Head title="User Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>
@@ -67,13 +87,13 @@ export default class List extends React.PureComponent {
             </nav>
             <div className={'mb-3 mt-3 row'}>
                 <div className={'col'}>
-                    <a type='button' className={'btn btn-sm btn-primary'} href='#'>
+                    <a type='button' className={'btn btn-sm btn-primary'} href={resource + '/create'}>
                         Add Client
                     </a>
                 </div>
             </div>
             <div className='card'>
-                <DataTable data={this.state.data} meta={this.state.meta} loadPage={this.handleLoadPage}/>
+                <DataTable meta={meta} data={data} path={resource} loadPage={this.handleLoadData}/>
             </div>
         </>
     }
