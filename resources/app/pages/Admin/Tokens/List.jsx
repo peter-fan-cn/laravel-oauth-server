@@ -31,8 +31,8 @@ const DataTable = ({data, meta, loadPage, path}) => {
             field: 'revoked',
             render: (data) => data ? <i className={'text-danger fa-solid fa-check-circle'}/> : null
         },
+        {title: 'Expired At', field: 'expired_at', render: data => dateFormat(data)},
         {title: 'Created At', field: 'created_at', render: data => dateFormat(data)},
-        // {title: 'Updated At', field: 'updated_at', render: data => dateFormat(data)},
         {
             title: 'Actions', render(_d, row) {
                 return <>

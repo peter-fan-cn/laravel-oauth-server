@@ -7,7 +7,7 @@ import Loading from "../../../components/Loading";
 
 const DataTable = ({data, meta, loadPage, path}) => {
     const columns = [
-        //{title: '#ID', field: 'id'},
+        {title: '#ID', field: 'id'},
         {
             title: 'Name',
             field: 'name',
