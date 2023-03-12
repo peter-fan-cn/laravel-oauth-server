@@ -72,7 +72,7 @@ export default class List extends React.PureComponent {
             </div>
             <div className='card'>
 
-                <DataTable data={data} meta={meta} loadPage={this.handleLoadPage}/>
+                <DataTable data={data} meta={meta} loadPage={this.handleLoadPage.bind(this)}/>
                 <Loading visible={loading}/>
             </div>
         </>

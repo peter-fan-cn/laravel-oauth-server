@@ -89,7 +89,7 @@ export default class List extends React.PureComponent {
                 </ol>
             </nav>
             <div className='card'>
-                <DataTable meta={meta} data={data} path={resource} loadPage={this.handleLoadData}/>
+                <DataTable meta={meta} data={data} path={resource} loadPage={this.handleLoadData.bind(this)}/>
                 <Loading visible={loading}/>
             </div>
         </>

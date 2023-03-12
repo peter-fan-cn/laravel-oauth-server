@@ -14,9 +14,10 @@ class TokenController extends Controller
      */
     public function index(Request $request, $user_id = null)
     {
-        $query  = Token::with(['user','client'])->orderBy('created_at', 'desc');
+        $query  = Token::with(['user','client'])
+            ->orderBy('created_at', 'desc');
         $fields = $request->get('fields', null);
-        $fields = $fields ?: ['id', 'name', 'scopes', 'expires_at', 'revoked', 'created_at', 'updated_at'];
+        $fields = $fields ?: ['id', 'name', 'scopes','user_id','client_id', 'expires_at', 'revoked', 'created_at', 'updated_at'];
         if (is_string($fields)) {
             $fields = explode(',', $fields);
         }
