@@ -17,16 +17,11 @@ class UserController extends Controller
     public function index(Request $request): JsonResource
     {
         $query  = User::query()->orderBy('created_at', 'desc');
-        $fields = $request->get('fields', null);
-        $fields = $fields ?: ['id', 'name', 'email', 'created_at', 'updated_at'];
-        if (is_string($fields)) {
-            $fields = explode(',', $fields);
-        }
         if ($request->get('res_type', 'pagination') === 'full') {
-            $content = $query->get($fields);
+            $content = $query->get();
         } else {
             $perPage = $request->get('per_page', 10);
-            $content = $query->paginate($perPage, $fields);
+            $content = $query->paginate($perPage);
         }
         return JsonResource::collection($content);
     }

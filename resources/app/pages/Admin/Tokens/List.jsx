@@ -6,8 +6,10 @@ import Loading from "../../../components/Loading";
 
 const DataTable = ({data, meta, loadPage, path}) => {
     const columns = [
-        {title: '#ID', field: 'id',
-        render:data=>data.substring(0,10)},
+        {
+            title: '#ID', field: 'id',
+            render: data => data.substring(0, 10)
+        },
         {
             title: 'Name',
             field: 'name',
@@ -23,25 +25,20 @@ const DataTable = ({data, meta, loadPage, path}) => {
             render: data => data ? <a href={'/admin/clients/' + data.id}>{data.name}</a> : '<nil>'
         },
         {
-            title: 'Scope',
+            title: 'Scopes',
             field: 'scopes',
-        },
-        {
-            title: 'Revoked',
-            field: 'revoked',
-            render: (data) => data ? <i className={'text-danger fa-solid fa-check-circle'}/> : null
+            render: data => data && data.length > 0 ?
+                data.map(scope=><span className='badge bg-primary'>{scope}</span>):
+                <span className='badge bg-primary'>*</span>
         },
         {title: 'Expired At', field: 'expired_at', render: data => dateFormat(data)},
         {title: 'Created At', field: 'created_at', render: data => dateFormat(data)},
         {
             title: 'Actions', render(_d, row) {
                 return <>
-                    <a href={`${path}/${row.id}/edit`}>
-                        <i className={'fa-solid fa-pencil-alt'}></i>
-                    </a>
-                    {row.revoked?<a className={'ms-2 link-warning'} href='#'>
+                    {row.revoked ? <a className={'ms-2 link-warning'} href='#'>
                             <i className={'fa-solid fa-arrow-rotate-back'}></i>
-                        </a>:
+                        </a> :
                         <a className={'ms-2 link-danger'} href='#'>
                             <i className={'fa-solid fa-trash'}></i>
                         </a>}
@@ -68,7 +65,7 @@ export default class List extends React.PureComponent {
                 res => this.setState(res.data),
                 e => console.log(e)
             )
-            .then(()=>{
+            .then(() => {
                 this.setState({loading: false})
             })
     }
@@ -79,7 +76,7 @@ export default class List extends React.PureComponent {
 
     render() {
         const {resource} = this.props
-        const {meta, data,loading} = this.state
+        const {meta, data, loading} = this.state
         return <>
             <Head title="User Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>

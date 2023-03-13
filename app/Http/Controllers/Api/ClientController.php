@@ -18,20 +18,15 @@ class ClientController extends Controller
      */
     public function index(Request $request, $user_id = null): JsonResource
     {
-        $query  = Client::with('user')->orderBy('created_at', 'desc');
-        $fields = $request->get('fields', null);
-        $fields = $fields ?: ['id', 'name', 'user_id', 'provider', 'redirect', 'personal_access_client', 'password_client', 'revoked', 'created_at', 'updated_at'];
-        if (is_string($fields)) {
-            $fields = explode(',', $fields);
-        }
+        $query = Client::with('user')->orderBy('created_at', 'desc');
         if ($user_id !== null) {
             $query->where('user_id', $user_id);
         }
         if ($request->get('res_type', 'pagination') === 'full') {
-            $content = $query->get($fields);
+            $content = $query->get();
         } else {
             $perPage = $request->get('per_page', 10);
-            $content = $query->paginate($perPage, $fields);
+            $content = $query->paginate($perPage);
         }
         return JsonResource::collection($content);
     }
@@ -41,19 +36,20 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|max:100',
-            'redirect' => 'nullable|string',
+        $data   = $request->validate([
+            'name'                   => 'required|max:100',
+            'redirect'               => 'nullable|string',
             'personal_access_client' => 'required|boolean',
-            'password_client' => 'required|boolean',
-            'company' => 'nullable|string|max:100',
-            'description' => 'nullable|string|max:255',
+            'password_client'        => 'required|boolean',
+            'company'                => 'nullable|string|max:100',
+            'site'                   => 'nullable|string|max:255',
+            'description'            => 'nullable|string|max:255',
         ]);
         $client = new Client();
-        $client->fill($request->all());
+        $client->fill($data);
         $client->revoked = false;
         $client->makeVisible('secret');
-        $secret = Str::random(32);
+        $secret         = Str::random(32);
         $client->secret = $secret;
         $client->save();
         return JsonResource::make($client);
@@ -72,7 +68,17 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        $client->fill($request->all());
+        $data = $request->validate([
+            'name'                   => 'max:100',
+            'redirect'               => 'nullable|string',
+            'personal_access_client' => 'boolean',
+            'password_client'        => 'boolean',
+            'company'                => 'nullable|string|max:100',
+            'site'                   => 'nullable|string|max:255',
+            'description'            => 'nullable|string|max:255',
+            'revoked'                => 'boolean'
+        ]);
+        $client->fill($data);
         $client->save();
         return JsonResource::make($client);
     }
@@ -82,6 +88,7 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return response()->noContent();
     }
 }

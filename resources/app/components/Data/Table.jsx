@@ -36,6 +36,6 @@ export default ({columns, data, meta: {links, total}, loadPage}) => {
             }
             </tbody>
         </table>
-        <Pagination links={links} loadPage={loadPage} total={total} className='mt-3'/>
+        <Pagination links={links} loadPage={loadPage} total={total} className='mx-3'/>
     </>
 }
