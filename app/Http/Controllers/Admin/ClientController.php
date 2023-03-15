@@ -25,6 +25,7 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
+        $client->load(['user']);
         return Inertia::render('Admin/Clients/Show', ['client' => $client]);
     }
 

@@ -1,3 +1,5 @@
+
+
 const Item = ({name, url, description, icon}) => {
     let iconItem = <div className="me-3">
         <i className={'fa-xl ' + icon}></i>
@@ -26,7 +28,7 @@ export default ({auth, items}) => {
             Welcome {auth.user.name}
         </h3>
         <div className="row row-cols-1 row-cols-md-3 g-4">
-            {items.map(item => <Item {...item}/>)}
+            {items.map((item, i) => <Item {...item} key={i}/>)}
         </div>
     </div>
 }

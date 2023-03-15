@@ -78,11 +78,11 @@ export default class List extends React.PureComponent {
         const {resource} = this.props
         const {meta, data, loading} = this.state
         return <>
-            <Head title="User Lists"/>
+            <Head title="Token Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><a href="/admin/">Home</a></li>
-                    <li className="breadcrumb-item active" aria-current="page">Scopes</li>
+                    <li className="breadcrumb-item active" aria-current="page">Tokens</li>
                 </ol>
             </nav>
             <div className='card'>

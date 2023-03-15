@@ -24,7 +24,7 @@ const DataTable = ({data, meta, loadPage, path}) => {
             render: (data) => data ? <i className={'text-success fa-solid fa-check-circle'}/> : null
         },
         {
-            title: 'Personal',
+            title: 'Password',
             field: 'password_client',
             render: (data) => data ? <i className={'text-success fa-solid fa-check-circle'}/> : null
         },
@@ -83,7 +83,7 @@ export default class List extends React.PureComponent {
         const {resource} = this.props
         const {meta, data,loading} = this.state
         return <>
-            <Head title="User Lists"/>
+            <Head title="Client Lists"/>
             <nav aria-label="breadcrumb" className={'mt-3'}>
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><a href="/admin/">Home</a></li>

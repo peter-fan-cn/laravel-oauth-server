@@ -12,7 +12,7 @@ class ScopeController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Admin/Scopes/List', [
-            'tokens' => Scope::all()
+            'scopes' => Scope::all()
         ]);
     }
 }

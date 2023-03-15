@@ -33,6 +33,7 @@ class UserController extends Controller
     public function show(Request $request, ?User $user = null)
     {
         if (!$user) $user = $request->user();
+
         return Inertia::render('Admin/Users/Show', [
             'user' => $user
         ]);

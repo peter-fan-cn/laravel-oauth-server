@@ -17,4 +17,10 @@ class TokenController extends Controller
         ];
         return Inertia::render('Admin/Tokens/List', $content);
     }
+
+    public function show(Token $token)
+    {
+        $token->load(['user','client']);
+        return Inertia::render('Admin/Tokens/Show', ['token' => $token]);
+    }
 }

@@ -1,9 +1,10 @@
 // Fonts
-//@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url('https://fonts.bunny.net/css');
 
 $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
 @import "@fortawesome/fontawesome-free/scss/brands";
 
 
@@ -13,4 +14,18 @@ $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+.img-avatar {
+    &.img-avatar-round {
+        border-radius: 50%;
+    }
 
+    &.img-avatar-sm {
+        width: 32px;
+        height: 32px;
+    }
+
+    &.img-avatar-md {
+        width: 64px;
+        height: 64px;
+    }
+}

@@ -10,8 +10,8 @@
     @inertiaHead
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+{{--    <link rel="dns-prefetch" href="//fonts.gstatic.com">--}}
+{{--    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">--}}
 
     <!-- Scripts -->
     @vitereactrefresh
