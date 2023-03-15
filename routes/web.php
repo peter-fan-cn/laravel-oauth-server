@@ -4,9 +4,15 @@ use App\Http\Controllers\Admin\{ClientController,
     HomeController as AdminHomeController,
     ScopeController,
     TokenController,
-    UserController};
+    UserController
+};
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
+use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
+use Laravel\Passport\Http\Controllers\AuthorizationController;
+use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
+use Laravel\Passport\Http\Controllers\TransientTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +43,27 @@ Route::prefix('/admin')
         Route::resource('tokens', TokenController::class)->only(['index', 'show']);
         Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
     });
+
+
+Route::group([
+    'as'     => 'passport.',
+    'prefix' => config('passport.path', 'oauth'),
+], function () {
+
+
+    Route::post('/token', [AccessTokenController::class, 'token'])
+        ->middleware('throttle')
+        ->name('token');
+    Route::get('/authorize', [AuthorizationController::class, 'authorize'])
+        ->middleware('web')
+        ->name('authorizations.authorize');
+
+    Route::middleware([
+        'web',
+        'auth:' . config('passport.guard', 'web')
+    ])->group(function () {
+        Route::post('/token/refresh', [TransientTokenController::class, 'refresh'])->name('token.refresh');
+        Route::post('/authorize', [ApproveAuthorizationController::class, 'approve'])->name('authorizations.approve');
+        Route::delete('/authorize', [DenyAuthorizationController::class, 'deny'])->name('authorizations.deny');
+    });
+});

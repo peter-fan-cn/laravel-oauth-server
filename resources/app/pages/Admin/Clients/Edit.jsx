@@ -13,7 +13,7 @@ export default class Edit extends React.PureComponent {
     }
 
     loadPopupUsers() {
-        return axios.get('/api/users?res_type=full')
+        return axios.get('/api/admin/users?res_type=full')
             .then(res => {
                 this.setState({users: res.data.data})
             })
@@ -54,7 +54,7 @@ export default class Edit extends React.PureComponent {
     loadClient() {
         const {id, client} = this.props;
         if (!client && id)
-            return axios.get('/api/clients/' + id)
+            return axios.get('/api/admin/clients/' + id)
                 .then(res => {
                     this.setState({client: res.data.data})
                 })

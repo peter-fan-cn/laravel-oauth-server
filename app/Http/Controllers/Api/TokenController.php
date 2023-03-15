@@ -12,14 +12,11 @@ class TokenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $user_id = null)
+    public function index(Request $request)
     {
         $query  = Token::with(['user','client'])
             ->where('revoked', false)
             ->orderBy('created_at', 'desc');
-        if ($user_id !== null) {
-            $query->where('user_id', $user_id);
-        }
         $perPage = $request->get('per_page', 10);
         $content = $query->paginate($perPage);
         return JsonResource::collection($content);

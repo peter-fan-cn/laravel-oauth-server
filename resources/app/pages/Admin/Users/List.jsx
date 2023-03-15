@@ -40,7 +40,7 @@ export default class List extends React.PureComponent {
     handleLoadPage  (url) {
         const {meta:{current_page}} = this.state
         this.setState({loading: true})
-        axios.get(url || `/api/users?page=${current_page}`)
+        axios.get(url || `/api/admin/users?page=${current_page}`)
             .then(
                 res => this.setState(res.data),
                 e => console.log(e)

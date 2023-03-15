@@ -13,7 +13,7 @@ export default class Create extends React.PureComponent {
     }
 
     loadPopupUsers() {
-        return axios.get('/api/users?res_type=full')
+        return axios.get('/api/admin/users?res_type=full')
             .then(
                 res => this.setState({users: res.data.data}),
                 e => console.log(e)
@@ -28,7 +28,7 @@ export default class Create extends React.PureComponent {
             title: 'Saving client data',
             didOpen(popup) {
                 Swal.showLoading()
-                axios.post('/api/clients', {...client})
+                axios.post('/api/admin/clients', {...client})
                     .then(
                         res => {
                             // redirect to list.

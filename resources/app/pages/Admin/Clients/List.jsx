@@ -65,7 +65,7 @@ export default class List extends React.PureComponent {
     handleLoadData(url) {
         const {meta: {current_page}} = this.state
         this.setState({loading: true})
-        axios.get(url || `/api/clients?page=${current_page}`)
+        axios.get(url || `/api/admin/clients?page=${current_page}`)
             .then(
                 res => this.setState(res.data),
                 e => console.log(e)

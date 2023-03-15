@@ -16,12 +16,9 @@ class ClientController extends Controller
      * @param Request $request
      * @return JsonResource
      */
-    public function index(Request $request, $user_id = null): JsonResource
+    public function index(Request $request): JsonResource
     {
         $query = Client::with('user')->orderBy('created_at', 'desc');
-        if ($user_id !== null) {
-            $query->where('user_id', $user_id);
-        }
         if ($request->get('res_type', 'pagination') === 'full') {
             $content = $query->get();
         } else {
