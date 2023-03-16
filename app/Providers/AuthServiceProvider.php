@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\OAuth\PersonalAccessClient;
 use App\Models\OAuth\Scope;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\App;
@@ -29,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensExpireIn(now()->addDays(15));
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
-
+        Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
         //Passport::hashClientSecrets();
 
 
