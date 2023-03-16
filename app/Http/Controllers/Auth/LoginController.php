@@ -127,6 +127,7 @@ class LoginController extends Controller
                 'attributes' => ['email', 'sub'],
                 'filter'     => "email = \"$username\""
             ]);
+            Log::debug('list users: ', $awsResult->get('Users'));
             if ($awsResult->count() == 0) {
                 throw ValidationException::withMessages([
                     $this->username() => [trans('auth.failed')],
@@ -160,6 +161,7 @@ class LoginController extends Controller
                     'password' => [trans('auth.password')],
                 ]);
             }
+            Log::warning('aws sdk throw an exception: ' . $ex->getAwsErrorMessage());
             throw ValidationException::withMessages([
                 $this->username() => [trans('auth.failed')],
             ]);
@@ -170,10 +172,10 @@ class LoginController extends Controller
 
     public function responseToCognitoAuth(Request $request)
     {
-        $password       = $request->input('password');
-        $session        = $request->input('session');
-        $username       = $request->input('username');
-        $challengeName  = 'NEW_PASSWORD_REQUIRED';
+        $password      = $request->input('password');
+        $session       = $request->input('session');
+        $username      = $request->input('username');
+        $challengeName = 'NEW_PASSWORD_REQUIRED';
         try {
             $awsResult      = CognitoLibrary::response($session, $challengeName, [
                 'NEW_PASSWORD' => $password,
@@ -183,7 +185,7 @@ class LoginController extends Controller
             $user           = $this->getNewUser($accessToken);
             $user->password = Hash::make($password);
             $user->save();
-            if($awsResult->get('session')) {
+            if ($awsResult->get('session')) {
                 Log::warning('cognito respond to auth challenge failed with unsupported challenge name: ' . $awsResult->get('ChallengeName'));
                 throw ValidationException::withMessages([
                     $this->username() => [trans('auth.failed')],
@@ -196,6 +198,7 @@ class LoginController extends Controller
                     'password' => [trans('auth.password')],
                 ]);
             }
+            Log::warning('aws sdk throw an exception: ' . $ex->getAwsErrorMessage());
             throw ValidationException::withMessages([
                 $this->username() => [trans('auth.failed')],
             ]);
@@ -218,13 +221,16 @@ class LoginController extends Controller
     {
         Log::debug('get user information with access token: ' . $accessToken);
         $oResultZ   = CognitoLibrary::getUser($accessToken);
-        $attributes = $oResultZ->get('UserAttributes');
+        Log::debug('cognito user information', $oResultZ->toArray());
+        $attributes = collect($oResultZ->get('UserAttributes'))->pluck('Value','Name');
         $id         = data_get($attributes, 'sub');
         $email      = data_get($attributes, 'email');
         $name       = data_get($attributes, 'custom:displayname');
         $level      = data_get($attributes, 'custom:displayname');
-        $user       = new User(['name' => $name, 'email' => $email]);
-
+        if (!$name) {
+            $name = data_get($attributes, 'name', 'Undefined');
+        }
+        $user             = new User(['name' => $name, 'email' => $email]);
         $user->sub        = $id;
         $user->provider   = 'Cognito';
         $user->user_level = $level;
