@@ -17,7 +17,12 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->dateTime('last_login_at')->nullable();
             $table->string('password');
+            $table->string('provider', 50)->nullable();
+            $table->string('sub', 50)->nullable();
+            $table->string('orggid', 50)->nullable();
+            $table->integer('user_level')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
