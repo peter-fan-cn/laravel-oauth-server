@@ -123,17 +123,14 @@ class LoginController extends Controller
         $password = $request->input('password');
         try {
             // look up users via Cognito
-            $awsResult = CognitoLibrary::getUsers([
-                'attributes' => ['email', 'sub'],
-                'filter'     => "email = \"$username\""
-            ]);
-            Log::debug('list users: ', $awsResult->get('Users'));
-            if ($awsResult->count() == 0) {
+            $cognitoUsers = CognitoLibrary::findUserByEmail($username);
+            Log::debug('list users: ', $cognitoUsers);
+            if(count($cognitoUsers) === 0) {
                 throw ValidationException::withMessages([
                     $this->username() => [trans('auth.failed')],
                 ]);
             }
-            $cognitoUser = $awsResult->get('Users')[0];
+            $cognitoUser = $cognitoUsers[0];
             $awsResult   = CognitoLibrary::userAuth(data_get($cognitoUser, 'Username'), $password);
 
             if (!$awsResult->get('Session')) {
@@ -223,7 +220,7 @@ class LoginController extends Controller
         $oResultZ = CognitoLibrary::getUser($accessToken);
         Log::debug('cognito user information', $oResultZ->toArray());
         $attributes = collect($oResultZ->get('UserAttributes'))->pluck('Value', 'Name');
-        $id         = data_get($attributes, 'sub');
+        $id         = $oResultZ->get('Username');
         $email      = data_get($attributes, 'email');
         $name       = data_get($attributes, 'custom:displayname');
         $level      = data_get($attributes, 'custom:displayname');
