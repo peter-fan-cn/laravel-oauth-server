@@ -220,9 +220,9 @@ class LoginController extends Controller
     private function getNewUser($accessToken): User
     {
         Log::debug('get user information with access token: ' . $accessToken);
-        $oResultZ   = CognitoLibrary::getUser($accessToken);
+        $oResultZ = CognitoLibrary::getUser($accessToken);
         Log::debug('cognito user information', $oResultZ->toArray());
-        $attributes = collect($oResultZ->get('UserAttributes'))->pluck('Value','Name');
+        $attributes = collect($oResultZ->get('UserAttributes'))->pluck('Value', 'Name');
         $id         = data_get($attributes, 'sub');
         $email      = data_get($attributes, 'email');
         $name       = data_get($attributes, 'custom:displayname');
@@ -230,10 +230,12 @@ class LoginController extends Controller
         if (!$name) {
             $name = data_get($attributes, 'name', 'Undefined');
         }
-        $user             = new User(['name' => $name, 'email' => $email]);
-        $user->sub        = $id;
-        $user->provider   = 'Cognito';
-        $user->user_level = $level;
+        $user = new User(['name' => $name, 'email' => $email]);
+
+        $user->sub               = $id;
+        $user->provider          = 'Cognito';
+        $user->user_level        = $level;
+        $user->email_verified_at = data_get($attributes, 'email_verified') ? now() : null;
         return $user;
     }
 
