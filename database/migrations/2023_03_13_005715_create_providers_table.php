@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('oauth_providers', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('provider', 50);
             $table->string('sub', 50);
             $table->unsignedBigInteger('user_id')->index();

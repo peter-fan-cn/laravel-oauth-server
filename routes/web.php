@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\{ClientController,
     HomeController as AdminHomeController,
     ScopeController,
@@ -30,6 +31,10 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::post('login/new-password', [LoginController::class, 'responseToCognitoAuth'])->name('login.new_password');
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
