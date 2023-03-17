@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Libraries\Aws\CognitoLibrary;
 use App\Libraries\Aws\PasswordBroker;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -40,6 +41,7 @@ class ResetPasswordController extends Controller
     protected function setUserPassword($user, $password)
     {
         $user->password = Hash::make($password);
+        CognitoLibrary::adminSetUserPassword($user->sub, $password);
     }
 
 

@@ -23,6 +23,11 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
         'name',
         'email',
         'password',
+        'sub',
+        'orggid',
+        'user_level',
+        'provider',
+        'description'
     ];
 
     /**
@@ -42,5 +47,17 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at'     => 'datetime'
     ];
+
+
+    public function avatarUrl($size = null): string
+    {
+        $avatar = $this->avatar;
+        if (!$avatar) {
+            $email  = $this->email;
+            $avatar = "https://s.gravatar.com/avatar/" . md5(strtolower(trim($email))) . ($size ? "?s=" . $size : '');
+        }
+        return $avatar;
+    }
 }

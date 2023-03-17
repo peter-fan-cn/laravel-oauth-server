@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->dateTime('last_login_at')->nullable();
             $table->string('password');
+            $table->text('description')->nullable();
             $table->string('provider', 50)->nullable();
             $table->string('sub', 50)->nullable();
             $table->string('orggid', 50)->nullable();

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\{ClientController,
     UserController
 };
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
@@ -30,7 +31,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::post('login/new-password', [LoginController::class, 'responseToCognitoAuth'])->name('login.new_password');
 
@@ -56,7 +57,7 @@ Route::group([
 ], function () {
 
 
-    Route::post('/token', [AccessTokenController::class, 'token'])
+    Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->middleware('throttle')
         ->name('token');
     Route::get('/authorize', [AuthorizationController::class, 'authorize'])

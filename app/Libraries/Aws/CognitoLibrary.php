@@ -38,7 +38,8 @@ class CognitoLibrary
         return new CognitoIdentityProviderClient($options);
     }
 
-    public static function findUserByEmail($email) {
+    public static function findUserByEmail($email)
+    {
         $result = CognitoLibrary::getUsers([
             'attributes' => ['email', 'sub'],
             'filter'     => "email = \"$email\""
@@ -52,8 +53,8 @@ class CognitoLibrary
      */
     public static function getUsers(array $options = []): Result
     {
-        $config      = config('codelocks.cognito');
-        $vUserPoolId = data_get($config, 'user_pool_id');
+        $config     = config('codelocks.cognito');
+        $userPoolId = data_get($config, 'user_pool_id');
         /*
          * You can only search for the following standard attributes:
          * username (case-sensitive)
@@ -72,7 +73,7 @@ class CognitoLibrary
             'Filter'          => data_get($options, 'filter'),
             'Limit'           => (int)data_get($options, 'limit', 25),
             //'PaginationToken' => data_get($options, 'token'),
-            'UserPoolId'      => $vUserPoolId, // REQUIRED
+            'UserPoolId'      => $userPoolId, // REQUIRED
         ];
         if (data_get($options, 'token')) {
             $aParameters['PaginationToken'] = data_get($options, 'token');
@@ -83,9 +84,9 @@ class CognitoLibrary
 
     public static function userAuth($username, $password): Result
     {
-        $config       = config('codelocks.cognito');
-        $vUserPoolId  = data_get($config, 'user_pool_id');
-        $vAppClientId = data_get($config, 'app_client_id');
+        $config      = config('codelocks.cognito');
+        $userPoolId  = data_get($config, 'user_pool_id');
+        $appClientId = data_get($config, 'app_client_id');
 //        $vAppClientSecret = $config->appClientSecret;
 //        $vSecurityHash    = CognitoLibrary::hash($password, $vAppClientSecret);
         $aParameters = [
@@ -95,8 +96,8 @@ class CognitoLibrary
                 'PASSWORD' => $password,
                 //                'SECRET_HASH' => $vSecurityHash,
             ],
-            'ClientId'       => $vAppClientId, // REQUIRED
-            'UserPoolId'     => $vUserPoolId,  // REQUIRED
+            'ClientId'       => $appClientId, // REQUIRED
+            'UserPoolId'     => $userPoolId,  // REQUIRED
         ];
         Log::debug('aws initiate auth parameters: ' . json_encode($aParameters));
         return self::client()->initiateAuth($aParameters);
@@ -111,11 +112,11 @@ class CognitoLibrary
 
     public static function response($session, $challengeName, $challengeResponses): Result
     {
-        $vAppClientId = config('codelocks.cognito.app_client_id');
-        $aParameters  = [
+        $appClientId = config('codelocks.cognito.app_client_id');
+        $aParameters = [
             'ChallengeName'      => $challengeName,
             'ChallengeResponses' => $challengeResponses,
-            'ClientId'           => $vAppClientId,
+            'ClientId'           => $appClientId,
             'Session'            => $session
         ];
         return CognitoLibrary::client()->respondToAuthChallenge($aParameters);
@@ -123,9 +124,9 @@ class CognitoLibrary
 
     public static function adminResetUserPassword($username): Result
     {
-        $vAppClientId = config('codelocks.cognito.app_client_id');
-        $aParameters  = [
-            'UserPoolId' => $vAppClientId, // REQUIRED
+        $appClientId = config('codelocks.cognito.app_client_id');
+        $aParameters = [
+            'UserPoolId' => $appClientId, // REQUIRED
             'Username'   => $username, // REQUIRED
         ];
         return CognitoLibrary::client()->adminResetUserPassword($aParameters);
@@ -133,11 +134,11 @@ class CognitoLibrary
 
     public static function adminSetUserPassword($username, $password): Result
     {
-        $vUserPoolId = config('codelocks.cognito.user_pool_id');
+        $userPoolId  = config('codelocks.cognito.user_pool_id');
         $aParameters = [
             'Password'   => $password, // REQUIRED
             'Permanent'  => true,
-            'UserPoolId' => $vUserPoolId, // REQUIRED
+            'UserPoolId' => $userPoolId, // REQUIRED
             'Username'   => $username, // REQUIRED
         ];
         return CognitoLibrary::client()->adminSetUserPassword($aParameters);
@@ -145,11 +146,50 @@ class CognitoLibrary
 
     public static function adminGetUser($username): Result
     {
-        $vUserPoolId = config('codelocks.cognito.user_pool_id');
+        $userPoolId  = config('codelocks.cognito.user_pool_id');
         $aParameters = [
-            'UserPoolId' => $vUserPoolId, // REQUIRED
+            'UserPoolId' => $userPoolId, // REQUIRED
             'Username'   => $username, // REQUIRED
         ];
         return CognitoLibrary::client()->adminGetUser($aParameters);
+    }
+
+    public static function adminUpdateUser($username, $attributes): Result
+    {
+        $userPoolId  = config('codelocks.cognito.user_pool_id');
+        $aParameters = [
+            'UserAttributes' => $attributes,
+            'UserPoolId'     => $userPoolId, // REQUIRED
+            'Username'       => $username, // REQUIRED
+        ];
+        return CognitoLibrary::client()->adminUpdateUserAttributes($aParameters);
+    }
+
+    public static function adminCreateUser($username, $attributes): Result
+    {
+        $userPoolId  = config('codelocks.cognito.user_pool_id');
+        $aParameters = [
+            //'DesiredDeliveryMediums' => ['<string>', ...],
+            //'ForceAliasCreation' => true || false,
+            'MessageAction'  => 'SUPPRESS',
+            //'TemporaryPassword' => '<string>',
+            'UserAttributes' => $attributes/*[
+            [
+                'Name' => '<string>', // REQUIRED
+                'Value' => '<string>',
+            ],
+            // ...
+        ]*/,
+            'UserPoolId'     => $userPoolId, // REQUIRED
+            'Username'       => $username, // REQUIRED
+            /*'ValidationData' => [
+                [
+                    'Name' => '<string>', // REQUIRED
+                    'Value' => '<string>',
+                ],
+                // ...
+            ],*/
+        ];
+        return CognitoLibrary::client()->adminCreateUser($aParameters);
     }
 }
