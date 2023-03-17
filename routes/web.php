@@ -57,7 +57,7 @@ Route::group([
 ], function () {
 
 
-    Route::post('/token', [AccessTokenController::class, 'token'])
+    Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->middleware('throttle')
         ->name('token');
     Route::get('/authorize', [AuthorizationController::class, 'authorize'])
