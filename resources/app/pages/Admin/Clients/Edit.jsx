@@ -76,10 +76,10 @@ export default class Edit extends React.PureComponent {
 
     render() {
         const {users, client, loading} = this.state;
-        const {auth, id} = this.props;
+        const {auth} = this.props;
         return (
             <>
-                <Head title="Create Client"/>
+                <Head title="Update Client"/>
                 <nav aria-label="breadcrumb" className={'mt-3'}>
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link href="/admin/">Home</Link></li>
@@ -89,7 +89,7 @@ export default class Edit extends React.PureComponent {
                 </nav>
                 <div className='card'>
                     <h5 className='card-header'>
-                        Update Client #{id}
+                        Update Client
                     </h5>
                     <div className='card-body'>
                         <div className='row'>

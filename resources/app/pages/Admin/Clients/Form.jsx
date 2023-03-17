@@ -68,25 +68,25 @@ export default ({user, users, client, onSave, loading}) => {
             </div>
             <div className='mb-3'>
                 <label>Client Redirects</label>
-                <input className='form-control' value={data.redirect}
+                <input className='form-control' value={data.redirect||""}
                        placeholder='Enter redirects separated with comma'
                        onChange={e => handleChange('redirect', e.target.value)}/>
             </div>
             <div className='mb-3'>
                 <label>Company</label>
-                <input className='form-control' value={data.company}
+                <input className='form-control' value={data.company||""}
                        placeholder='Enter company name'
                        onChange={e => handleChange('company', e.target.value)}/>
             </div>
             <div className='mb-3'>
                 <label>Company Site</label>
-                <input className='form-control' value={data.site}
+                <input className='form-control' value={data.site||""}
                        placeholder='Enter domain site'
                        onChange={e => handleChange('site', e.target.value)}/>
             </div>
             <div className='mb-3'>
                 <label>Company Description</label>
-                <textarea className='form-control' value={data.description}
+                <textarea className='form-control' value={data.description||""}
                           placeholder='Enter company description'
                           onChange={e => handleChange('description', e.target.value)}/>
             </div>
