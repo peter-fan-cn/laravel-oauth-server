@@ -26,7 +26,7 @@ export default class Edit extends React.PureComponent {
             title: 'Saving client data',
             didOpen(popup) {
                 Swal.showLoading()
-                axios.put('/api/clients/' + id, {...client})
+                axios.put('/api/admin/clients/' + id, {...client})
                     .then(
                         res => {
                             // redirect to list.
