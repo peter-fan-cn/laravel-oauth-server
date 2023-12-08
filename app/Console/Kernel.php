@@ -13,9 +13,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        if(!App::runningInConsole()) {
-            $schedule->command('telescope:clear')->daily();
-        }
     }
 
     /**
