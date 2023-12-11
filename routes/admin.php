@@ -28,12 +28,10 @@ use Laravel\Passport\Http\Controllers\TransientTokenController;
 */
 
 
-Route::middleware('auth')
-    ->group(function () {
-        Route::get('/', [AdminHomeController::class, 'index'])->name('admin');
-        Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'create']);
-        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit', 'create']);
-        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
-        Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
-    });
+Route::get('/', [AdminHomeController::class, 'index'])->name('admin');
+Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'create']);
+Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit', 'create']);
+Route::resource('tokens', TokenController::class)->only(['index', 'show']);
+Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
+
 

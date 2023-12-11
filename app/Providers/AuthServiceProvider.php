@@ -35,9 +35,7 @@ class AuthServiceProvider extends ServiceProvider
 
 
         if(!App::runningInConsole()) {
-            $scopes = Scope::all()
-                ->pluck('description', 'name')
-                ->all();
+            $scopes = config('passport.scopes');
             Passport::tokensCan($scopes);
         }
     }

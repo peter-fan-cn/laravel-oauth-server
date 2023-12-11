@@ -238,6 +238,8 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return inertia('Auth/Login');
+        return inertia('Auth/Login', [
+            '_token'=> csrf_token()
+        ]);
     }
 }

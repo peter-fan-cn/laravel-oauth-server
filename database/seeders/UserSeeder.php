@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'is_admin' => true,
         ]);
 
         $orgs = (new ClientRepository(Str::uuid(), Str::random(32)))
