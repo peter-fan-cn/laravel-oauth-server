@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Libraries\Model\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Organization extends Model
@@ -19,4 +20,19 @@ class Organization extends Model
         'level',
         'sort',
     ];
+
+    public function users()
+    {
+        $this->belongsToMany(
+            User::class,
+            'user_has_organizations',
+            'organization_id',
+            'user_id',
+        );
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }

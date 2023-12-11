@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\User\Option;
+use App\Models\User\Organization;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -22,12 +24,15 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
         'avatar',
         'name',
         'email',
+        'phone_number',
         'password',
-        'sub',
-        'orggid',
-        'user_level',
-        'provider',
-        'description'
+        'description',
+        'organization_id',
+        'last_login_at',
+        'is_admin',
+        'guard',
+        'level',
+        'status',
     ];
 
     /**
@@ -60,4 +65,34 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
         }
         return $avatar;
     }
+
+
+    public function options()
+    {
+        return $this->hasMany(Option::class, 'user_id');
+    }
+
+    public function ownedOrganizations()
+    {
+        return $this->hasMany(Organization::class, 'owner_id');
+    }
+
+    public function organizations()
+    {
+        $this->belongsToMany(
+            Organization::class,
+            'user_has_organizations',
+            'user_id',
+            'organization_id'
+        );
+    }
+
+    public function currentOrganization()
+    {
+        return $this->getAttribute('organization_id') ?
+            $this->belongsTo(Organization::class, 'organization_id') :
+            $this->hasOne(Organization::class, 'owner_id')->latestOfMany();
+    }
+
+
 }

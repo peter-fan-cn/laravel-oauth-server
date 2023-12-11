@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
-            $table->uuid('owner_id')->nullable();
-            $table->uuid('parent_id')->nullable();
+            $table->foreignUuid('owner_id')->nullable();
+            $table->foreignUuid('parent_id')->nullable();
             $table->string('name', 50);
             $table->text('description')->nullable();
             $table->string('status', 50)->nullable()->default('active');
