@@ -17,7 +17,23 @@ class OrganizationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'owner_id' => null,
+            'parent_id' => null,
+            'name' => fake()->realTextBetween(10, 50),
+            'description' => fake()->realTextBetween(50, 255),
+            'status' => 'active',
+            'level' => 0,
+            'sort' => 0,
         ];
+    }
+
+    /**
+     * Indicate that the model's email address should be unverified.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'inactive',
+        ]);
     }
 }

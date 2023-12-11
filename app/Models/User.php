@@ -79,7 +79,7 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
 
     public function organizations()
     {
-        $this->belongsToMany(
+        return $this->belongsToMany(
             Organization::class,
             'user_has_organizations',
             'user_id',

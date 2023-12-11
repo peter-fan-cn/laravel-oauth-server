@@ -11,7 +11,6 @@ class Organization extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'owner_id',
         'parent_id',
         'name',
@@ -23,7 +22,7 @@ class Organization extends Model
 
     public function users()
     {
-        $this->belongsToMany(
+        return $this->belongsToMany(
             User::class,
             'user_has_organizations',
             'organization_id',
