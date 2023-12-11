@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('avatar')->nullable();
+            $table->uuid('organization_id')->nullable();  // current organization, if not exists, will ge the first of owned teams
             $table->string('email')->unique();
+            $table->string('phone_number')->unique();  // can sign in with phone number
+            $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->dateTime('last_login_at')->nullable();
             $table->string('password');
             $table->text('description')->nullable();
-            $table->string('provider', 50)->nullable();
-            $table->string('sub', 50)->nullable();
-            $table->string('orggid', 50)->nullable();
-            $table->integer('user_level')->nullable();
+            $table->string('guard')->nullable();  // web, admin default web
+            $table->mediumInteger('level')->nullable()->default(10); // user level 0,10,20,30,40,50
+            $table->string('status', 50)->nullable()->default('active');
             $table->rememberToken();
             $table->timestamps();
         });

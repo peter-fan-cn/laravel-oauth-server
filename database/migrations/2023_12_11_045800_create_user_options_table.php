@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('oauth_scopes', function (Blueprint $table) {
-            $table->string('id',100)->primary();
-            $table->string('description', 255)->nullable();
-//            $table->timestamps();
+        Schema::create('user_options', function (Blueprint $table) {
+            $table->uuid('user_id');
+            $table->string('key', 100);
+            $table->text('value')->nullable();
+            $table->primary(['user_id','key']);
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('oauth_scopes');
+        Schema::dropIfExists('user_options');
     }
 };

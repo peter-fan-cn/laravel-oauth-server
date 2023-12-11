@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Models\OAuth;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Scope extends Model
+class Setting extends Model
 {
     use HasFactory;
-    protected $table = 'oauth_scopes';
-    public $timestamps = false;
 }

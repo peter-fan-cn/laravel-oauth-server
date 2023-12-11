@@ -7,6 +7,7 @@ use App\Libraries\Aws\CognitoLibrary;
 use App\Libraries\Aws\PasswordBroker;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -45,4 +46,7 @@ class ResetPasswordController extends Controller
     }
 
 
+    public function showResetForm(Request $request)
+    {
+    }
 }

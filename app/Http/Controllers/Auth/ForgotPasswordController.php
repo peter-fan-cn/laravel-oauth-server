@@ -30,4 +30,7 @@ class ForgotPasswordController extends Controller
     }
 
 
+    public function showLinkRequestForm()
+    {
+    }
 }

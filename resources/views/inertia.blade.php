@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @inertiaHead
+    @routes
 
     <!-- Fonts -->
 {{--    <link rel="dns-prefetch" href="//fonts.gstatic.com">--}}
@@ -15,15 +16,10 @@
 
     <!-- Scripts -->
     @vitereactrefresh
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @vite([ 'resources/app/main.jsx'])
 </head>
 <body>
-<div>
-    @include('layouts.navbar')
-    <div class="container">
-    @inertia
-    </div>
-</div>
+
+@inertia
 </body>
 </html>

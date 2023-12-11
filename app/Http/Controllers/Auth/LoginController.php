@@ -236,4 +236,8 @@ class LoginController extends Controller
         return $user;
     }
 
+    public function showLoginForm()
+    {
+        return inertia('Auth/Login');
+    }
 }
