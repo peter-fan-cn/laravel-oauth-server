@@ -3,12 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminAuthenticate
+class AdminMigration
 {
     /**
      * Handle an incoming request.
@@ -17,16 +15,16 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($user = Auth::guard('web')->user()) {
-            if ($user->is_admin) {
-                Auth::guard('admin')->login($user);
-                return $next($request);
-            }
-        }
-        throw new AuthenticationException(
-            'Unauthenticated.', ['web', 'admin'], $this->redirectTo($request)
-        );
+        // migrate admin 'guard' from web 'guard'
+        $this->checkIsAdmin($request);
+        // end migrate admin 'guard' from web 'guard'
+        return $next($request);
+    }
 
+    protected function checkIsAdmin(Request $request)
+    {
+        $user       = $request->user();
+        abort_unless( $user?->isAdmin(), 403);
     }
 
     protected function redirectTo(Request $request): ?string

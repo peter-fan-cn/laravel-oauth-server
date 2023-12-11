@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('password');
             $table->text('description')->nullable();
             $table->boolean('is_admin')->nullable();
-            $table->string('guard')->nullable();  // web, admin default web
             $table->mediumInteger('level')->nullable()->default(10); // user level 0,10,20,30,40,50
             $table->string('status', 50)->nullable()->default('active');
             $table->rememberToken();

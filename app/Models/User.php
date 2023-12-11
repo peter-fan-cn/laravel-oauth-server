@@ -30,7 +30,6 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
         'organization_id',
         'last_login_at',
         'is_admin',
-        'guard',
         'level',
         'status',
     ];
@@ -52,9 +51,14 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'last_login_at'     => 'datetime'
+        'last_login_at'     => 'datetime',
+        'is_admin'          => 'boolean'
     ];
 
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
 
     public function avatarUrl($size = null): string
     {
