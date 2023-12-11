@@ -40,15 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
-Route::prefix('/admin')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('/', [AdminHomeController::class, 'index'])->name('admin');
-        Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'create']);
-        Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit', 'create']);
-        Route::resource('tokens', TokenController::class)->only(['index', 'show']);
-        Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
-    });
 
 
 Route::group([
