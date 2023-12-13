@@ -17,7 +17,7 @@ export default defineConfig({
     ],
     resolve:{
         alias:{
-            '@':'./resources/app'
+            '@':'resources/app'
         }
     }
 });

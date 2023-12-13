@@ -1,20 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\{ClientController,
-    HomeController as AdminHomeController,
+use App\Http\Controllers\Admin\{
+    ClientController,
+    HomeController,
     ScopeController,
     TokenController,
     UserController
 };
-use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
-use Laravel\Passport\Http\Controllers\AuthorizationController;
-use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
-use Laravel\Passport\Http\Controllers\TransientTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,10 +21,12 @@ use Laravel\Passport\Http\Controllers\TransientTokenController;
 */
 
 
-Route::get('/', [AdminHomeController::class, 'index'])->name('admin');
-Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'create']);
-Route::resource('clients', ClientController::class)->only(['index', 'show', 'edit', 'create']);
-Route::resource('tokens', TokenController::class)->only(['index', 'show']);
-Route::resource('scopes', ScopeController::class)->only(['index', 'show', 'edit', 'create']);
+Route::get('/', [HomeController::class, 'index'])->name('admin');
+
+// routes for Admin
+Route::apiResource('users', UserController::class);
+Route::apiResource('clients', ClientController::class);
+Route::apiResource('tokens', TokenController::class);
+Route::apiResource('scopes', ScopeController::class);
 
 

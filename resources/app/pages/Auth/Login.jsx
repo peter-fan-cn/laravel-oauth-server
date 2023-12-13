@@ -11,8 +11,6 @@ import logo from '../../assets/codelocks.png'
 import avatar from '../../assets/av-1.jpg'
 
 
-
-
 const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [checked, setChecked] = useState(false);
@@ -51,10 +49,10 @@ const LoginPage = () => {
                                 <label htmlFor="password1" className="block text-900 font-medium text-xl mb-2">
                                     Password
                                 </label>
-                                <Password inputId="password1" value={password} name='password'
-                                          onChange={(e) => setPassword(e.target.value)} placeholder="password"
-                                          toggleMask className="w-full mb-5"
-                                          inputClassName="w-full p-3 md:w-[30rem]"></Password>
+                                <InputText type='password' inputId="password1" value={password} name='password'
+                                           onChange={(e) => setPassword(e.target.value)} placeholder="password"
+                                           className="w-full mb-5"
+                                           inputClassName="w-full p-3 md:w-[30rem]"></InputText>
 
                                 <div className="flex align-items-center justify-content-between mb-5 gap-5">
                                     <div className="flex align-items-center">

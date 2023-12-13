@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\User\Option;
 use App\Models\User\Organization;
+use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -55,9 +56,53 @@ class User extends \App\Libraries\Model\User implements \Illuminate\Contracts\Au
         'is_admin'          => 'boolean'
     ];
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->is_admin;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function getOptions(string $key): mixed
+    {
+        $options = $this->options()->where('key', 'like', "$key.*")->get();
+        return $options->pluck('value')->all();
+    }
+
+    /**
+     * @param string $key
+     * @param string $cast boolean, integer, array, datetime
+     * @param mixed|null $castOption
+     * @return mixed
+     */
+    public function getOption(string $key, string $cast = 'string', mixed $castOption = null): mixed
+    {
+        $option = $this->options()->where('key', $key)->first();
+
+        return match ($cast) {
+            'boolean'  => boolval($option->value),
+            'integer'  => intval($option->value),
+            'array'    => json_encode($option->value, true),
+            'datetime' => Carbon::createFromTimeString($option->value, $castOption),
+            default    => $option->value,
+        };
+    }
+
+    /**
+     * @param string $key
+     * @param mixed|null $value
+     * @param string $cast
+     * @return void
+     */
+    public function setOption(string $key, mixed $value = null,  string $cast = 'string'): void
+    {
+        $this->options()->upsert([
+            'key'   => $key,
+            'value' => $value,
+            'cast' => $cast
+        ], ['user_id', 'key'], ['value']);
     }
 
     public function avatarUrl($size = null): string

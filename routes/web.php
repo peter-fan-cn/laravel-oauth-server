@@ -1,12 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\{ClientController,
-    HomeController as AdminHomeController,
-    ScopeController,
-    TokenController,
-    UserController
-};
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,24 +35,12 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::as('passport.')->prefix('oauth')->group(function () {
 
-Route::group([
-    'as'     => 'passport.',
-    'prefix' => config('passport.path', 'oauth'),
-], function () {
+    Route::post('/token', [AccessTokenController::class, 'issueToken'])->middleware('throttle')->name('token');
+    Route::get('/authorize', [AuthorizationController::class, 'authorize'])->middleware('web')->name('authorizations.authorize');
 
-
-    Route::post('/token', [AccessTokenController::class, 'issueToken'])
-        ->middleware('throttle')
-        ->name('token');
-    Route::get('/authorize', [AuthorizationController::class, 'authorize'])
-        ->middleware('web')
-        ->name('authorizations.authorize');
-
-    Route::middleware([
-        'web',
-        'auth:' . config('passport.guard', 'web')
-    ])->group(function () {
+    Route::middleware('auth:web')->group(function () {
         Route::post('/token/refresh', [TransientTokenController::class, 'refresh'])->name('token.refresh');
         Route::post('/authorize', [ApproveAuthorizationController::class, 'approve'])->name('authorizations.approve');
         Route::delete('/authorize', [DenyAuthorizationController::class, 'deny'])->name('authorizations.deny');

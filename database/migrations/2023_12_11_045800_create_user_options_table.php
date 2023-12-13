@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->string('key', 100);
             $table->text('value')->nullable();
+            $table->string('cast')->nullable();
             $table->primary(['user_id','key']);
         });
     }

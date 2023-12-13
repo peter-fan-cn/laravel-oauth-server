@@ -1,4 +1,4 @@
-
+import AdminLayout from "@/components/Layout/AdminLayout";
 
 const Item = ({name, url, description, icon}) => {
     let iconItem = <div className="me-3">
@@ -23,12 +23,14 @@ const Item = ({name, url, description, icon}) => {
 }
 
 export default ({auth, items}) => {
-    return <div className={'mt-4'}>
-        <h3>
-            Welcome {auth.user.name}
-        </h3>
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-            {items.map((item, i) => <Item {...item} key={i}/>)}
+    return <AdminLayout>
+        <div className='mt-4'>
+            <h3>
+                Welcome {auth.user.name}
+            </h3>
+            <div className="row row-cols-1 row-cols-md-3 g-4">
+                {items.map((item, i) => <Item {...item} key={i}/>)}
+            </div>
         </div>
-    </div>
+    </AdminLayout>
 }

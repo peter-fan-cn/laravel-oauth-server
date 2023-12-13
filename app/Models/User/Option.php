@@ -14,7 +14,7 @@ class Option extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable   = ['user_id', 'key', 'value'];
+    protected $fillable   = ['user_id', 'key', 'value', 'cast'];
 
     public function user()
     {

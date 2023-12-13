@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->string('key', 100)->primary();
             $table->text('value')->nullable();
+            $table->string('cast')->nullable();
         });
     }
 

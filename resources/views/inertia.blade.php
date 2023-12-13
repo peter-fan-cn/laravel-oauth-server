@@ -6,6 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://kit.fontawesome.com/a4b52a71ed.js" crossorigin="anonymous"></script>
 
     @routes
     @inertiaHead

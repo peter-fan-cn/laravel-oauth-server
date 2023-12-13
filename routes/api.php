@@ -19,19 +19,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->group(function () {
-    // routes for Admin
-    Route::prefix('/admin')->group(function () {
-        Route::apiResource('users', UserController::class);
-        Route::apiResource('clients', ClientController::class);
-        Route::apiResource('tokens', TokenController::class);
-    });
+
 
     Route::get('/user', function (){
         return request()->user();
     });
 
-    Route::prefix('/oauth')
-        ->as('oauth')
+    Route::prefix('oauth')->as('oauth.')
         ->namespace('Laravel\Passport\Http\Controllers')
         ->group(function (){
 

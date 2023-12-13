@@ -1,2 +1,13 @@
 @import "base.css";
 @import "primereact/resources/themes/mdc-light-indigo/theme.css";
+
+@layer components {
+    .surface-ground {
+        background-color: var(--surface-ground);
+    }
+
+    .surface-card {
+        background-color: var(--surface-card);
+    }
+
+}
