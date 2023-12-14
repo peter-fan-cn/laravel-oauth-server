@@ -65,6 +65,10 @@ const LoginPage = () => {
                                        style={{color: 'var(--primary-color)'}}>
                                         Forgot password?
                                     </a>
+                                    <a className="font-medium no-underline ml-2 text-right cursor-pointer"
+                                       style={{color: 'var(--primary-color)'}}>
+                                        Register
+                                    </a>
                                 </div>
                                 <Button label="Sign In" className="w-full p-3 text-xl"
                                         onClick={() => router.visit('/')}></Button>

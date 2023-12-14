@@ -5,8 +5,8 @@ const Item = ({name, url, description, icon}) => {
         <i className={'fa-xl ' + icon}></i>
     </div>
 
-    return <div className="col">
-        <div className="p-4 shadow-sm bg-white d-flex position-relative">
+    return <div className="grid">
+        <div className="p-4 shadow-sm bg-white flex relative">
             {icon ? iconItem : null}
             <div>
                 <div className="mb-2 fw-semibold fs-5">
@@ -24,11 +24,11 @@ const Item = ({name, url, description, icon}) => {
 
 export default ({auth, items}) => {
     return <AdminLayout>
-        <div className='mt-4'>
-            <h3>
+        <div>
+            <h3 className='text-2xl mb-4'>
                 Welcome {auth.user.name}
             </h3>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
                 {items.map((item, i) => <Item {...item} key={i}/>)}
             </div>
         </div>
