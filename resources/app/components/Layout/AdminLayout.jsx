@@ -17,7 +17,7 @@ const AdminLayout = ({children, title}) => {
             </aside>
             }
             <section className='flex flex-col grow'>
-                <main className='p-4 grow overflow-scroll'>
+                <main className='p-4 grow'>
                     {children}
                 </main>
                 <footer className='p-4'>

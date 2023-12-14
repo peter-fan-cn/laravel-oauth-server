@@ -20,34 +20,33 @@ const AsideMenuItem = ({
         setActive(path)
     }
     return (
-        <li className='ml-4'>
+        <li className='px-4'>
             {visible && root && <div className="py-3 text-sm font-bold">{label}</div>}
             {visible && !root &&
                 (
                     href ?
                         <a
-                            className={classNames(className, 'block text-sm p-2 transition-colors relative')}
+                            className={classNames(className, 'flex w-ful rounded justify-between items-center text-sm p-2 transition-colors relative hover:bg-gray-200/50 hover:ring-1 hover:ring-gray-200 ')}
                             href={href} target={target} onClick={event => itemClick(event, {path, disabled})}>
                             {icon}
                             {iconClassName && <i className={classNames(iconClassName, 'mr-2')}></i>}
-                            <span className="">{label}</span>
+                            <span className="flex-1 text-start">{label}</span>
                             {items &&
-                                <i className={classNames("fa fa-fw fa-angle-down", {'rotate-180': active?.startsWith(path)})}></i>}
+                                <i className={classNames("fa fa-fw fa-angle-down ", {'rotate-180': active?.startsWith(path)})}></i>}
                         </a> :
                         <button
-                            className={classNames(className, 'block text-sm p-2 transition-colors relative')}
-                            onClick={event => itemClick(event, {path, disabled})}
-                        >
+                            className={classNames(className, 'flex w-full rounded justify-between items-center text-sm p-2 transition-colors relative hover:bg-gray-200/50 hover:ring-1 hover:ring-gray-200 ')}
+                            onClick={event => itemClick(event, {path, disabled})}>
                             {icon}
                             {iconClassName && <i className={classNames(iconClassName, 'mr-2')}></i>}
-                            <span className="">{label}</span>
+                            <span className="flex-1 text-start">{label}</span>
                             {items &&
-                                <i className={classNames("fa fa-fw fa-angle-down", {'rotate-180': active?.startsWith(path)})}></i>}
+                                <i className={classNames("fa fa-fw fa-angle-down ", {'rotate-180': active?.startsWith(path)})}></i>}
                         </button>
                 )
             }
             {items &&
-                <ul className={classNames({'hidden': !root && !active?.startsWith(path)})}>
+                <ul className={classNames( {'hidden': !root && !active?.startsWith(path)})}>
                     {
                         items && items.map((item, index) =>
                             <AsideMenuItem

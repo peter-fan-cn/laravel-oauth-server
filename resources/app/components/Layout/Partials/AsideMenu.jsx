@@ -8,7 +8,7 @@ const AsideMenu = ({children}) => {
         !active?.startsWith(path) ? setActive(path): setActive(null)
     }
     return (
-        <ul className=''>
+        <ul className='py-2'>
             {
                 menus.map((menu, i)=>
                     <AsideMenuItem
